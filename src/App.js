@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import Navigation from './components/Navigation'
-import './index.css'
+import Navigation from './components/Navigation/Navigation';
+import Logo from './components/Logo/Logo';
+import './index.css';
 
 
 class App extends Component {
@@ -8,6 +9,7 @@ class App extends Component {
     return (
       <div className="App">
         <Navigation />
+        <Logo />
       </div>
     );
   }
