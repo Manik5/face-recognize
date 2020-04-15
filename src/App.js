@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './index.css';
 
-import { Navigation, Logo, ImageLinkForm} from './components';
+import { Navigation, Logo, ImageLinkForm, Rank } from './components';
 
 class App extends Component {
   render() {
@@ -9,6 +9,7 @@ class App extends Component {
       <div className="App">
         <Navigation />
         <Logo />
+        <Rank />
         <ImageLinkForm />
       </div>
     );
