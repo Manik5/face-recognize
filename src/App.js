@@ -30,6 +30,7 @@ class App extends Component {
       input: '',
       imageUrl: '',
       box: {},
+      route: 'signIn'
     }
   }
 
@@ -47,6 +48,11 @@ class App extends Component {
       bottomRow: height - (clarifaiFace.bottom_row * height)
     }
   }
+
+  onRouteChange = () => {
+    this.setState({route: 'home'});
+  }
+
 
   // displayFaceBox method
   displayFaceBox = (box) => {
@@ -77,16 +83,21 @@ class App extends Component {
         <Particles className="particles"
          params={ particleOptions }
          />
-         <SignIn />
         <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm
-          onInputChange={this.onInputChange} // calling "this" because it calls the App and onInputChange is a property of the App so "this" = App
-          onButtonSubmit={this.onButtonSubmit}
-        />
-        {/* Calling "this.state" because it calls the App and the state and then the property defined, check line 28 */}
-        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
+        {/* Sign In form with ternary operator to check if the user has already sign up   */}
+        { this.state.route === 'signIn'
+          ? <SignIn onRouteChange={this.onRouteChange} />
+            : <div>
+                <Logo />
+                <Rank />
+                <ImageLinkForm
+                  onInputChange={this.onInputChange} // calling "this" because it calls the App and onInputChange is a property of the App so "this" = App
+                  onButtonSubmit={this.onButtonSubmit}
+                />
+                {/* Calling "this.state" because it calls the App and the state and then the property defined, check line 28 */}
+                <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
+              </div>
+            }
       </div>
     );
   }
