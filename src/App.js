@@ -4,7 +4,7 @@ import Clarifai from 'clarifai';
 import './App.css';
 import './index.css';
 
-import { Navigation, Logo, ImageLinkForm, Rank, FaceRecognition } from './components';
+import { Navigation, Logo, ImageLinkForm, Rank, FaceRecognition, SignIn } from './components';
 
 
 const app = new Clarifai.App({
@@ -77,6 +77,7 @@ class App extends Component {
         <Particles className="particles"
          params={ particleOptions }
          />
+         <SignIn />
         <Navigation />
         <Logo />
         <Rank />
@@ -93,15 +94,3 @@ class App extends Component {
 
 export default App;
 
-
-// app.models
-// .predict(
-// Clarifai.COLOR_MODEL,
-//     // URL
-//     "https://samples.clarifai.com/metro-north.jpg"
-// )
-// .then(function(response) {
-//     // do something with responseconsole.log(response);
-//     },
-//     function(err) {// there was an error}
-// );
