@@ -4,7 +4,7 @@ import Clarifai from 'clarifai';
 import './App.css';
 import './index.css';
 
-import { Navigation, Logo, ImageLinkForm, Rank } from './components';
+import { Navigation, Logo, ImageLinkForm, Rank, FaceRecognition } from './components';
 
 
 const app = new Clarifai.App({
@@ -28,22 +28,24 @@ class App extends Component {
     super();
     this.state = {
       input: '',
+      imageUrl: '',
     }
   }
 
   onInputChange = (event) => {
-    console.log(event.target.value);
+    this.setState({ input: event.target.value })
   }
 
   onButtonSubmit = () => {
+    this.setState({ imageUrl: this.state.input });
     app.models
       .predict(
-        "a403429f2ddf4b49b307e318f00e528b",
-        "https://samples.clarifai.com/face-det.jpg"
+        Clarifai.FACE_DETECT_MODEL,
+        this.state.input
       )
       .then(
         function (response) {
-          console.log(response)
+          console.log(response.outputs[0].data.regions[0].region_info.bounding_box)
           // do something with response
         },
         function (err) {
@@ -65,9 +67,23 @@ class App extends Component {
           onInputChange={this.onInputChange}
           onButtonSubmit={this.onButtonSubmit}
         />
+        <FaceRecognition imageUrl={this.state.imageUrl} />
       </div>
     );
   }
 }
 
 export default App;
+
+
+// app.models
+// .predict(
+// Clarifai.COLOR_MODEL,
+//     // URL
+//     "https://samples.clarifai.com/metro-north.jpg"
+// )
+// .then(function(response) {
+//     // do something with responseconsole.log(response);
+//     },
+//     function(err) {// there was an error}
+// );
