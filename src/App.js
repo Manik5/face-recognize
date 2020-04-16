@@ -29,30 +29,47 @@ class App extends Component {
     this.state = {
       input: '',
       imageUrl: '',
+      box: {},
     }
   }
 
+  // calculateFaceLocation method
+
+  calculateFaceLocation = (data) => {
+    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box
+    const image = document.getElementById('inputImage');
+    const width = Number(image.width);
+    const height = Number(image.height);
+    return {
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: width - (clarifaiFace.right_col * width),
+      bottomRow: height - (clarifaiFace.bottom_row * height)
+    }
+  }
+
+  // displayFaceBox method
+  displayFaceBox = (box) => {
+    console.log(box)
+    this.setState({ box: box})
+  }
+
+
+  // triggering the event of the form box
   onInputChange = (event) => {
     this.setState({ input: event.target.value })
   }
 
+  // triggering the event of the button
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
     app.models
       .predict(
         Clarifai.FACE_DETECT_MODEL,
-        this.state.input
-      )
-      .then(
-        function (response) {
-          console.log(response.outputs[0].data.regions[0].region_info.bounding_box)
-          // do something with response
-        },
-        function (err) {
-          // there was an error
-        }
-      );
-  }
+        this.state.input)
+      .then(response => this.displayFaceBox(this.calculateFaceLocation(response)))
+      .catch(err => console.log(err))
+    }
 
   render() {
     return (
@@ -64,10 +81,11 @@ class App extends Component {
         <Logo />
         <Rank />
         <ImageLinkForm
-          onInputChange={this.onInputChange}
+          onInputChange={this.onInputChange} // calling "this" because it calls the App and onInputChange is a property of the App so "this" = App
           onButtonSubmit={this.onButtonSubmit}
         />
-        <FaceRecognition imageUrl={this.state.imageUrl} />
+        {/* Calling "this.state" because it calls the App and the state and then the property defined, check line 28 */}
+        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
       </div>
     );
   }
