@@ -4,7 +4,7 @@ import Clarifai from 'clarifai';
 import './App.css';
 import './index.css';
 
-import { Navigation, Logo, ImageLinkForm, Rank, FaceRecognition, SignIn } from './components';
+import { Navigation, Logo, ImageLinkForm, Rank, FaceRecognition, SignIn, Register } from './components';
 
 
 const app = new Clarifai.App({
@@ -30,7 +30,8 @@ class App extends Component {
       input: '',
       imageUrl: '',
       box: {},
-      route: 'signIn'
+      route: 'signIn',
+      isSignedIn: false
     }
   }
 
@@ -52,6 +53,11 @@ class App extends Component {
   // Changing routes during Sign In and Sign Out
 
   onRouteChange = (route) => {
+    if (route === 'signOut') {
+      this.setState({ isSignedIn: false })
+    } else if (route === 'home') {
+      this.setState({ isSignedIn: true })
+    }
     this.setState({route: route});
   }
 
@@ -85,11 +91,10 @@ class App extends Component {
         <Particles className="particles"
          params={ particleOptions }
          />
-        <Navigation onRouteChange={this.onRouteChange} />
+        <Navigation isSignedIn={this.state.isSignedIn} onRouteChange={this.onRouteChange} />
         {/* Sign In form with ternary operator to check if the user has already sign up   */}
-        { this.state.route === 'signIn'
-          ? <SignIn onRouteChange={this.onRouteChange} />
-            : <div>
+        { this.state.route === 'home'
+            ? <div>
                 <Logo />
                 <Rank />
                 <ImageLinkForm
@@ -99,6 +104,11 @@ class App extends Component {
                 {/* Calling "this.state" because it calls the App and the state and then the property defined, check line 28 */}
                 <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
               </div>
+              : (
+                  this.state.route === 'signIn'
+                  ? <SignIn onRouteChange={this.onRouteChange} />
+                  : <Register onRouteChange={this.onRouteChange} />
+                )
             }
       </div>
     );
