@@ -49,8 +49,10 @@ class App extends Component {
     }
   }
 
-  onRouteChange = () => {
-    this.setState({route: 'home'});
+  // Changing routes during Sign In and Sign Out
+
+  onRouteChange = (route) => {
+    this.setState({route: route});
   }
 
 
@@ -83,7 +85,7 @@ class App extends Component {
         <Particles className="particles"
          params={ particleOptions }
          />
-        <Navigation />
+        <Navigation onRouteChange={this.onRouteChange} />
         {/* Sign In form with ternary operator to check if the user has already sign up   */}
         { this.state.route === 'signIn'
           ? <SignIn onRouteChange={this.onRouteChange} />
