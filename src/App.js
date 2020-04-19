@@ -64,7 +64,6 @@ class App extends Component {
 
   // displayFaceBox method
   displayFaceBox = (box) => {
-    console.log(box)
     this.setState({ box: box})
   }
 
@@ -86,14 +85,15 @@ class App extends Component {
     }
 
   render() {
+    const { isSignedIn, imageUrl, route, box } = this.state;
     return (
       <div className="App">
         <Particles className="particles"
          params={ particleOptions }
          />
-        <Navigation isSignedIn={this.state.isSignedIn} onRouteChange={this.onRouteChange} />
+        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
         {/* Sign In form with ternary operator to check if the user has already sign up   */}
-        { this.state.route === 'home'
+        { route === 'home'
             ? <div>
                 <Logo />
                 <Rank />
@@ -102,10 +102,10 @@ class App extends Component {
                   onButtonSubmit={this.onButtonSubmit}
                 />
                 {/* Calling "this.state" because it calls the App and the state and then the property defined, check line 28 */}
-                <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
+                <FaceRecognition box={box} imageUrl={imageUrl} />
               </div>
               : (
-                  this.state.route === 'signIn'
+                  route === 'signIn'
                   ? <SignIn onRouteChange={this.onRouteChange} />
                   : <Register onRouteChange={this.onRouteChange} />
                 )
